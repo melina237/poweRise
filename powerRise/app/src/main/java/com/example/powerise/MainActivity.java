@@ -1,5 +1,5 @@
-// MainActivity.java
 package com.example.powerise;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lightSensorActivity = new SensorActivity(this);
+
+
     }
 
     @Override
