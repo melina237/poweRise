@@ -15,9 +15,9 @@ public class MorningViewHolder extends RecyclerView.ViewHolder {
         wordItemView = itemView.findViewById(R.id.textView);
     }
 
-    public void bind(float ms) {
-        // Convert float to String before setting it in the TextView
-        wordItemView.setText(String.valueOf(ms));
+    public void bind(String record) {
+        wordItemView.setText(record);
+
     }
 
     static MorningViewHolder create(ViewGroup parent) {

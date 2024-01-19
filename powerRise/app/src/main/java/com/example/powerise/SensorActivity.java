@@ -11,8 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.powerise.Morning;
-import com.example.powerise.MorningViewModel;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class SensorActivity implements SensorEventListener {
     private SensorManager sensorManager;
@@ -51,10 +52,24 @@ public class SensorActivity implements SensorEventListener {
 
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
-            long durationMillis = SystemClock.elapsedRealtime() - belowThresholdTimestamp;
+
+            long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+            String dayOfWeek = LocalDate.now().format(formatter);
+
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
-            Morning morning = new Morning(durationMillis);
+            LocalTime currentTime = LocalTime.now();
+
+            // Set the start time to 8:00 AM
+            String startTime = LocalTime.of(8, 0).toString();
+
+            // Set the end time to the current time
+            String endTime = currentTime.toString().substring(0,8);
+
+
+            Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
             mMorningViewModel.insert(morning);
+
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
             belowThresholdTimestamp = SystemClock.elapsedRealtime();

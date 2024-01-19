@@ -23,10 +23,10 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
     @Override
     public void onBindViewHolder(MorningViewHolder holder, int position) {
         Morning current = getItem(position);
-        holder.bind(current.getmorning());
+        holder.bind(current.getMorning());
     }
 
-    static class MorningDiff extends DiffUtil.ItemCallback<Morning> {
+    static public class MorningDiff extends DiffUtil.ItemCallback<Morning> {
 
         @Override
         public boolean areItemsTheSame(@NonNull Morning oldItem, @NonNull Morning newItem) {
@@ -35,7 +35,7 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
 
         @Override
         public boolean areContentsTheSame(@NonNull Morning oldItem, @NonNull Morning newItem) {
-            return Objects.equals(oldItem.getmorning(), newItem.getmorning());
+            return Objects.equals(oldItem.getMorning(), newItem.getMorning());
         }
     }
 }

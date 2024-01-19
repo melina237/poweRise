@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Morning.class}, version = 1, exportSchema = false)
+@Database(entities = {Morning.class}, version = 5, exportSchema = false)
 public abstract class MorningRoomDatabase extends RoomDatabase {
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
@@ -25,11 +25,13 @@ public abstract class MorningRoomDatabase extends RoomDatabase {
                 // If you want to start with more words, just add them.
                 MorningDao dao = INSTANCE.morningDao();
                 dao.deleteAll();
+                /*
+                Morning morning = new Morning(2, "test", "test");
+                dao.insert(morning);
+                morning = new Morning(3, "test2", "test");
+                dao.insert(morning);
+                */
 
-                Morning morning = new Morning(2);
-                dao.insert(morning);
-                morning = new Morning(3);
-                dao.insert(morning);
             });
         }
     };
@@ -37,16 +39,17 @@ public abstract class MorningRoomDatabase extends RoomDatabase {
     public abstract MorningDao morningDao();
     private static volatile MorningRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static MorningRoomDatabase getDatabase(final Context context) {
+    public static MorningRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (MorningRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     MorningRoomDatabase.class, "alarmApp_database")
                             .addCallback(sRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

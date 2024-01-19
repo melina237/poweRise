@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
-        mMorningViewModel.getAllMornings().observe(this, words -> {
-            // Update the cached copy of the words in the adapter.
-            adapter.submitList(words);
+        mMorningViewModel.getAllMornings().observe(this, mornings -> {
+            // Update the cached copy of the mornings in the adapter.
+            adapter.submitList(mornings);
         });
 
         lightSensorActivity = new SensorActivity(this, mMorningViewModel);
