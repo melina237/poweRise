@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startNoiseAlert(View view) {
-        Intent intent = new Intent(this, NoiseAlert.class);
+        Intent intent = new Intent(this, SoundRecorder.class);
         startActivity(intent);
 
     }

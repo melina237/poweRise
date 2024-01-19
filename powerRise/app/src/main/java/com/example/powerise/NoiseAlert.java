@@ -16,7 +16,7 @@ public class NoiseAlert extends Activity {
 
     private boolean mRunning = false;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private static final int POLL_INTERVAL = 200;
+    private static final int POLL_INTERVAL = 300;
     private Handler mHandler = new Handler();
     MediaPlayer mp = new MediaPlayer();
 

@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NoiseAlert" />
+        <activity android:name=".SoundRecorder" />
+
     </application>
 
 </manifest>
