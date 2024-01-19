@@ -31,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void startAlarm(View view) {
+        Intent intent = new Intent(this, Alarm.class);
+        startActivity(intent);
+
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
