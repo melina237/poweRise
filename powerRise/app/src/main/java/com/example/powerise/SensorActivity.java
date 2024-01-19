@@ -5,20 +5,33 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class SensorActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Context context;
-
     private ImageView lightIcon;
+    private MorningViewModel mMorningViewModel; // Corrected field name
 
-    public SensorActivity(Context context) {
+    private boolean belowThreshold = true;
+    private long belowThresholdTimestamp;
+
+    public SensorActivity(Context context, MorningViewModel mMorningViewModel) {
         this.context = context;
+        this.mMorningViewModel = mMorningViewModel;
         initializeSensor();
     }
 
@@ -33,26 +46,42 @@ public class SensorActivity implements SensorEventListener {
 
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        // Do something here if sensor accuracy changes.
     }
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        lightIcon = ((AppCompatActivity)context).findViewById(R.id.lightIcon);
+        lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
 
-        if (lux > 10000) {
+        if (lux > 10000 && belowThreshold) {
+            belowThreshold = false;
+
+            long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+            String dayOfWeek = LocalDate.now().format(formatter);
+
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
-            System.out.println("gross");
-        } else {
-            lightIcon.setImageResource(R.drawable.baseline_access_time_24);
-            System.out.println("klein");
-        }
+            LocalTime currentTime = LocalTime.now();
 
-        System.out.println("wert");
+            // Set the start time to 8:00 AM
+            String startTime = LocalTime.of(8, 0).toString();
+
+            // Set the end time to the current time
+            String endTime = currentTime.toString().substring(0,8);
+
+
+            Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+            mMorningViewModel.insert(morning);
+            Log.d("neuer eintrag", morning.getMorning());
+
+        } else if (lux <= 10000 && !belowThreshold) {
+            belowThreshold = true;
+            belowThresholdTimestamp = SystemClock.elapsedRealtime();
+            lightIcon.setImageResource(R.drawable.baseline_access_time_24);
+        }
         Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
     }
-
 
     public void onResume() {
         if (lightSensor != null) {
