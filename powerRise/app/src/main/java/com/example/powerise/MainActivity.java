@@ -1,10 +1,15 @@
 package com.example.powerise;
-import android.os.Bundle;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     private SensorActivity lightSensorActivity;
@@ -36,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
         // Call the onResume method of SensorActivity
         lightSensorActivity.onResume();
     }
+    public void startSoundRecorder(View view) {
+        Intent intent = new Intent(this, SoundRecorder.class);
+        startActivity(intent);
+
+    }
 
     @Override
     protected void onPause() {
@@ -44,3 +54,4 @@ public class MainActivity extends AppCompatActivity {
         lightSensorActivity.onPause();
     }
 }
+
