@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.powerise.db.Morning;
-import com.example.powerise.db.MorningViewModel;
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,8 +1,10 @@
-package com.example.powerise.db;
+package com.example.powerise.db.morning;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+
+import com.example.powerise.db.MorningRoomDatabase;
 
 import java.util.List;
 

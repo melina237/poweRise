@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import com.example.powerise.db.MorningListAdapter;
-import com.example.powerise.db.MorningViewModel;
+import com.example.powerise.db.morning.MorningListAdapter;
+import com.example.powerise.db.morning.MorningViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private SensorActivity lightSensorActivity;

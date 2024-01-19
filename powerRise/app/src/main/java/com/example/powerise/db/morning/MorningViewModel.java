@@ -1,4 +1,4 @@
-package com.example.powerise.db;
+package com.example.powerise.db.morning;
 
 import android.app.Application;
 
