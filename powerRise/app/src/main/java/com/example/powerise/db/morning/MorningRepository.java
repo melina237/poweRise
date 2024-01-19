@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.powerise.db.MorningRoomDatabase;
+import com.example.powerise.db.RoomDatabase;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class MorningRepository {
     // See the BasicSample in the android-architecture-components repository at
     // https://github.com/googlesamples
     public MorningRepository(Application application) {
-        MorningRoomDatabase db = MorningRoomDatabase.getDatabase(application);
+        RoomDatabase db = RoomDatabase.getDatabase(application);
         mMorningDao = db.morningDao();
         mAllmornings = mMorningDao.getAlphabetizedmornings();
     }
@@ -32,7 +32,7 @@ public class MorningRepository {
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
     public void insert(Morning morning) {
-        MorningRoomDatabase.databaseWriteExecutor.execute(() -> {
+        RoomDatabase.databaseWriteExecutor.execute(() -> {
             mMorningDao.insert(morning);
         });
     }
