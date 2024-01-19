@@ -1,6 +1,4 @@
-package com.example.powerise.db;
-
-import static com.example.powerise.R.layout.activity_main;
+package com.example.powerise;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.powerise.R;
-
-class MorningViewHolder extends RecyclerView.ViewHolder {
+public class MorningViewHolder extends RecyclerView.ViewHolder {
     private final TextView wordItemView;
 
     private MorningViewHolder(View itemView) {
@@ -20,7 +16,8 @@ class MorningViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(float ms) {
-        wordItemView.setText((int) ms);
+        // Convert float to String before setting it in the TextView
+        wordItemView.setText(String.valueOf(ms));
     }
 
     static MorningViewHolder create(ViewGroup parent) {

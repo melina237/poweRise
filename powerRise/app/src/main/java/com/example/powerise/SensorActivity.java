@@ -1,4 +1,5 @@
 package com.example.powerise;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,24 +11,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.powerise.db.Morning;
-import com.example.powerise.db.MorningViewModel;
-
-import java.time.Duration;
-import java.time.LocalTime;
+import com.example.powerise.Morning;
+import com.example.powerise.MorningViewModel;
 
 public class SensorActivity implements SensorEventListener {
-    MorningViewModel mMorningViewModel;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Context context;
     private ImageView lightIcon;
+    private MorningViewModel mMorningViewModel; // Corrected field name
 
     private boolean belowThreshold = true;
     private long belowThresholdTimestamp;
 
-    public SensorActivity(Context context) {
+    public SensorActivity(Context context, MorningViewModel mMorningViewModel) {
         this.context = context;
+        this.mMorningViewModel = mMorningViewModel; // Corrected assignment
         initializeSensor();
     }
 

@@ -1,10 +1,12 @@
-package com.example.powerise.db;
+package com.example.powerise;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.example.powerise.Morning;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public interface MorningDao {
     // allowing the insert of the same morning multiple times by passing a
     // conflict resolution strategy
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(com.example.powerise.db.Morning morning);
+    void insert(Morning morning);
 
     @Query("DELETE FROM morning_table")
     void deleteAll();

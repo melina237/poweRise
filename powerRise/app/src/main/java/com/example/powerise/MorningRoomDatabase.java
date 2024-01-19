@@ -1,4 +1,4 @@
-package com.example.powerise.db;
+package com.example.powerise;
 
 import android.content.Context;
 
@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {com.example.powerise.db.Morning.class}, version = 1, exportSchema = false)
+@Database(entities = {Morning.class}, version = 1, exportSchema = false)
 public abstract class MorningRoomDatabase extends RoomDatabase {
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
@@ -23,12 +23,12 @@ public abstract class MorningRoomDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 // Populate the database in the background.
                 // If you want to start with more words, just add them.
-                com.example.powerise.db.MorningDao dao = INSTANCE.morningDao();
+                MorningDao dao = INSTANCE.morningDao();
                 dao.deleteAll();
 
-                Morning morning = new com.example.powerise.db.Morning(2);
+                Morning morning = new Morning(2);
                 dao.insert(morning);
-                morning = new com.example.powerise.db.Morning(3);
+                morning = new Morning(3);
                 dao.insert(morning);
             });
         }

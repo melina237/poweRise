@@ -1,4 +1,4 @@
-package com.example.powerise.db;
+package com.example.powerise;
 
 import android.app.Application;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class MorningViewModel extends AndroidViewModel {
 
-    private com.example.powerise.db.MorningRepository mRepository;
+    private MorningRepository mRepository;
 
-    private final LiveData<List<com.example.powerise.db.Morning>> mAllmornings;
+    private final LiveData<List<Morning>> mAllmornings;
 
     public MorningViewModel (Application application) {
         super(application);
@@ -19,7 +19,7 @@ public class MorningViewModel extends AndroidViewModel {
         mAllmornings = mRepository.getAllmornings();
     }
 
-    LiveData<List<com.example.powerise.db.Morning>> getAllWords() { return mAllmornings; }
+    public LiveData<List<Morning>> getAllMornings() { return mAllmornings; }
 
-    public void insert(com.example.powerise.db.Morning morning) { mRepository.insert(morning); }
+    public void insert(Morning morning) { mRepository.insert(morning); }
 }

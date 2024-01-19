@@ -1,4 +1,4 @@
-package com.example.powerise.db;
+package com.example.powerise;
 
 import android.content.Intent;
 import android.os.Bundle;
