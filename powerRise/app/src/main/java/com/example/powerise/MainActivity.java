@@ -9,7 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.example.powerise.db.MorningListAdapter;
+import com.example.powerise.db.MorningViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private SensorActivity lightSensorActivity;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mMorningViewModel.getAllMornings().observe(this, mornings -> {
             // Update the cached copy of the mornings in the adapter.
             adapter.submitList(mornings);
+
         });
 
         lightSensorActivity = new SensorActivity(this, mMorningViewModel);

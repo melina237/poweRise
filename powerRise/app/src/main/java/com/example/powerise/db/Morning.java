@@ -1,4 +1,4 @@
-package com.example.powerise;
+package com.example.powerise.db;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

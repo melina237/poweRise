@@ -6,10 +6,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.powerise.db.Morning;
+import com.example.powerise.db.MorningViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +31,7 @@ public class SensorActivity implements SensorEventListener {
 
     public SensorActivity(Context context, MorningViewModel mMorningViewModel) {
         this.context = context;
-        this.mMorningViewModel = mMorningViewModel; // Corrected assignment
+        this.mMorningViewModel = mMorningViewModel;
         initializeSensor();
     }
 
@@ -69,6 +73,7 @@ public class SensorActivity implements SensorEventListener {
 
             Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
             mMorningViewModel.insert(morning);
+            Log.d("neuer eintrag", morning.getMorning());
 
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
