@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SoundRecorder" />
+        <activity android:name=".Alarm" />
 
     </application>
 
