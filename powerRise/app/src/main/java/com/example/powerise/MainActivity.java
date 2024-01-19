@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
         // Call the onResume method of SensorActivity
         lightSensorActivity.onResume();
     }
+    public void startSoundRecorder(View view) {
+        Intent intent = new Intent(this, SoundRecorder.class);
+        startActivity(intent);
+
+    }
 
     @Override
     protected void onPause() {
