@@ -78,7 +78,6 @@ public class SensorActivity implements SensorEventListener {
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
             belowThresholdTimestamp = SystemClock.elapsedRealtime();
-
             lightIcon.setImageResource(R.drawable.baseline_access_time_24);
         }
         Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
