@@ -20,11 +20,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class SensorActivity implements SensorEventListener {
-    private SensorManager sensorManager;
-    private Sensor lightSensor;
-    private Context context;
-    private ImageView lightIcon;
-    private MorningViewModel mMorningViewModel; // Corrected field name
+    private final Context context;
+    private final MorningViewModel mMorningViewModel;
 
     private boolean belowThreshold = true;
     private long belowThresholdTimestamp;
@@ -36,15 +33,14 @@ public class SensorActivity implements SensorEventListener {
     }
 
     private void initializeSensor() {
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         if (lightSensor == null) {
             Toast.makeText(context, "Light sensor not available", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
     }
@@ -52,44 +48,44 @@ public class SensorActivity implements SensorEventListener {
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
+        ImageView lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
 
         if (lux > 10000 && belowThreshold) {
-            belowThreshold = false;
-
-            long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
-            String dayOfWeek = LocalDate.now().format(formatter);
-
-            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
-            LocalTime currentTime = LocalTime.now();
-
-            // Set the start time to 8:00 AM
-            String startTime = LocalTime.of(8, 0).toString();
-
-            // Set the end time to the current time
-            String endTime = currentTime.toString().substring(0,8);
-
-
-            Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
-            mMorningViewModel.insert(morning);
-            Log.d("neuer eintrag", morning.getMorning());
+            BrightEnough(lightIcon);
 
         } else if (lux <= 10000 && !belowThreshold) {
-            belowThreshold = true;
-            belowThresholdTimestamp = SystemClock.elapsedRealtime();
-            lightIcon.setImageResource(R.drawable.baseline_access_time_24);
+            TooDim(lightIcon);
         }
-        Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
     }
 
-    public void onResume() {
-        if (lightSensor != null) {
-            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+    private void TooDim(ImageView lightIcon) {
+        belowThreshold = true;
+        belowThresholdTimestamp = SystemClock.elapsedRealtime();
+        lightIcon.setImageResource(R.drawable.baseline_access_time_24);
     }
 
-    public void onPause() {
-        sensorManager.unregisterListener(this);
+    private void BrightEnough(ImageView lightIcon) {
+        belowThreshold = false;
+
+        long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+        String dayOfWeek = LocalDate.now().format(formatter);
+
+        lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+        LocalTime currentTime = LocalTime.now();
+
+        // Set the start time to 8:00 AM
+        String startTime = LocalTime.of(8, 0).toString();
+
+        // Set the end time to the current time
+        String endTime = currentTime.toString().substring(0,8);
+
+
+        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+        mMorningViewModel.insert(morning);
+        Log.d("New entry", morning.getMorning());
     }
+
+
 }

@@ -7,8 +7,12 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.util.Objects;
 
 public class SoundRecorder extends Activity {
 
@@ -17,7 +21,7 @@ public class SoundRecorder extends Activity {
     private static final int POLL_INTERVAL = 200; // milliseconds
 
     private MediaRecorder mRecorder = null;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
     private boolean isRecording = false;
 
     private String filePath;
@@ -28,7 +32,7 @@ public class SoundRecorder extends Activity {
         setContentView(R.layout.activity_sound_recorder); // Set your layout here
 
         // Set file path for recording
-        filePath = getExternalFilesDir(null).getAbsolutePath() + "/audio_record.3gp";
+        filePath = Objects.requireNonNull(getExternalFilesDir(null)).getAbsolutePath() + "/audio_record.3gp";
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
@@ -59,7 +63,7 @@ public class SoundRecorder extends Activity {
         }
     }
 
-    private Runnable mPollTask = new Runnable() {
+    private final Runnable mPollTask = new Runnable() {
         public void run() {
             if (isRecording) {
                 double amplitude = getAmplitude();
@@ -100,7 +104,7 @@ public class SoundRecorder extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startRecording();
