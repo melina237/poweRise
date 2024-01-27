@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Weekdays Alarm
         Intent weekdayIntent = new Intent(this, WeekdayReceiver.class);
-        PendingIntent weekdayPendingIntent = PendingIntent.getBroadcast(this, 0, weekdayIntent, 0);
+        PendingIntent weekdayPendingIntent = PendingIntent.getBroadcast(this, 0, weekdayIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // Weekends Alarm
         Intent weekendIntent = new Intent(this, WeekendReceiver.class);
-        PendingIntent weekendPendingIntent = PendingIntent.getBroadcast(this, 1, weekendIntent, 0);
+        PendingIntent weekendPendingIntent = PendingIntent.getBroadcast(this, 1, weekendIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // Set the alarms
         setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.MONDAY, 6);
