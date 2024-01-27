@@ -1,7 +1,10 @@
-// MainActivity.java
 package com.example.powerise;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,8 +15,13 @@ import android.view.View;
 
 import java.util.Calendar;
 
+import com.example.powerise.db.morning.MorningListAdapter;
+import com.example.powerise.db.morning.MorningViewModel;
+
+
 public class MainActivity extends AppCompatActivity {
     private SensorActivity lightSensorActivity;
+    private MorningViewModel mMorningViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Repeat weekly
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final MorningListAdapter adapter = new MorningListAdapter(new MorningListAdapter.MorningDiff());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        mMorningViewModel.getAllMornings().observe(this, mornings -> {
+            // Update the cached copy of the mornings in the adapter.
+            adapter.submitList(mornings);
+
+        });
+
+        lightSensorActivity = new SensorActivity(this, mMorningViewModel);
+
+
     }
 
     @Override
