@@ -19,14 +19,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class SensorActivity implements SensorEventListener {
+public class LightSensor implements SensorEventListener {
     private final Context context;
     private final MorningViewModel mMorningViewModel;
 
     private boolean belowThreshold = true;
     private long belowThresholdTimestamp;
 
-    public SensorActivity(Context context, MorningViewModel mMorningViewModel) {
+    public LightSensor(Context context, MorningViewModel mMorningViewModel) {
         this.context = context;
         this.mMorningViewModel = mMorningViewModel;
         initializeSensor();
