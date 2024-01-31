@@ -23,39 +23,53 @@ public class MainActivity extends AppCompatActivity {
 
     private void scheduleAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int requestCode = 0; // Start with a base request code
 
         // Weekdays Alarm
-        Intent weekdayIntent = new Intent(this, WeekdayReceiver.class);
-        PendingIntent weekdayPendingIntent = PendingIntent.getBroadcast(this, 0, weekdayIntent, PendingIntent.FLAG_IMMUTABLE);
+        for (int i = Calendar.MONDAY; i <= Calendar.FRIDAY; i++) {
+            Intent weekdayIntent = new Intent(this, WeekdayReceiver.class);
+            PendingIntent weekdayPendingIntent = PendingIntent.getBroadcast(this, requestCode, weekdayIntent, PendingIntent.FLAG_IMMUTABLE);
+            setRepeatingAlarm(alarmManager, weekdayPendingIntent, i, 6);
+            requestCode++;
+        }
 
-        // Weekends Alarm
-        Intent weekendIntent = new Intent(this, WeekendReceiver.class);
-        PendingIntent weekendPendingIntent = PendingIntent.getBroadcast(this, 1, weekendIntent, PendingIntent.FLAG_IMMUTABLE);
+        // Weekend Alarms
+        // Saturday
+        Intent weekendIntentSaturday = new Intent(this, WeekendReceiver.class);
+        PendingIntent weekendPendingIntentSaturday = PendingIntent.getBroadcast(this, requestCode, weekendIntentSaturday, PendingIntent.FLAG_IMMUTABLE);
+        setRepeatingAlarm(alarmManager, weekendPendingIntentSaturday, Calendar.SATURDAY, 8);
+        requestCode++;
 
-        // Set the alarms
-        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.MONDAY, 6);
-        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.TUESDAY, 6);
-        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.WEDNESDAY, 6);
-        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.THURSDAY, 6);
-        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.FRIDAY, 6);
-
-        setRepeatingAlarm(alarmManager, weekendPendingIntent, Calendar.SATURDAY, 8);
-        setRepeatingAlarm(alarmManager, weekendPendingIntent, Calendar.SUNDAY, 8);
-
+        // Sunday
+        Intent weekendIntentSunday = new Intent(this, WeekendReceiver.class);
+        PendingIntent weekendPendingIntentSunday = PendingIntent.getBroadcast(this, requestCode, weekendIntentSunday, PendingIntent.FLAG_IMMUTABLE);
+        setRepeatingAlarm(alarmManager, weekendPendingIntentSunday, Calendar.SUNDAY, 8);
     }
+
+
 
     private void setRepeatingAlarm(AlarmManager alarmManager, PendingIntent pendingIntent, int dayOfWeek, int hourOfDay) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        // Repeat weekly
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        // Adjust to the next occurrence of the specified day of the week
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        int daysUntilNextDayOfWeek = (dayOfWeek - today + 7) % 7;
+        if (daysUntilNextDayOfWeek == 0) { // If today is the day, check if time has already passed
+            if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+                daysUntilNextDayOfWeek = 7;
+            }
+        }
+        calendar.add(Calendar.DAY_OF_YEAR, daysUntilNextDayOfWeek);
 
+        // Set the alarm to repeat weekly
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
+
+
 
     @Override
     protected void onResume() {
