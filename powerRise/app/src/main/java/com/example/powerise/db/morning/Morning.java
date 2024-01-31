@@ -1,5 +1,8 @@
 package com.example.powerise.db.morning;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -34,15 +37,15 @@ public class Morning {
         this.endAlarm = endAlarm;
     }
 
-    public String getMorning() {
-        //int orientation = SensorActivity.context.getResources().getConfiguration().orientation;
+    public String getMorning(Context context) {
+        int orientation = context.getResources().getConfiguration().orientation;
 
-        //if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Device is in landscape orientation (horizontal)
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Gerät ist im Querformat (horizontal)
             return String.format(Locale.getDefault(), "%s, %s: %s - %s (%s)", dayOfWeek, date, startAlarm, endAlarm, mMorning);
-        /*} else {
-            // Device is in portrait orientation (vertical)
+        } else {
+            // Gerät ist im Hochformat (vertikal)
             return String.format(Locale.getDefault(), "%s, %s: %s", dayOfWeek, date, mMorning);
-        }*/
+        }
     }
 }

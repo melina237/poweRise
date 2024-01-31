@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final MorningListAdapter adapter = new MorningListAdapter(new MorningListAdapter.MorningDiff());
+        final MorningListAdapter adapter = new MorningListAdapter(new MorningListAdapter.MorningDiff(this));
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
