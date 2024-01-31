@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         mMorningViewModel.getAllMornings().observe(this, mornings -> {
-            // Update the cached copy of the mornings in the adapter.
+
             adapter.submitList(mornings);
 
         });
