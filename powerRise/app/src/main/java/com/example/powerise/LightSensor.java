@@ -1,91 +1,66 @@
 package com.example.powerise;
 
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.SystemClock;
-import android.util.Log;
+import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.powerise.db.morning.Morning;
-import com.example.powerise.db.morning.MorningViewModel;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+public class LightSensor extends AppCompatActivity implements SensorEventListener {
 
-public class LightSensor implements SensorEventListener {
-    private final Context context;
-    private final MorningViewModel mMorningViewModel;
 
-    private boolean belowThreshold = true;
-    private long belowThresholdTimestamp;
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
 
-    public LightSensor(Context context, MorningViewModel mMorningViewModel) {
-        this.context = context;
-        this.mMorningViewModel = mMorningViewModel;
-        initializeSensor();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_light_sensor); // Replace with your layout file
+
+
+                initializeSensor();
     }
 
     private void initializeSensor() {
-        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         if (lightSensor == null) {
-            Toast.makeText(context, "Light sensor not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Light sensor not available", Toast.LENGTH_SHORT).show();
+        } else {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
+    @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Do something here if sensor accuracy changes.
+        // Sensor accuracy changes handling
     }
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        ImageView lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
+        ImageView lightIcon = findViewById(R.id.lightIcon);
 
-        if (lux > 10000 && belowThreshold) {
-            BrightEnough(lightIcon);
+    }
 
-        } else if (lux <= 10000 && !belowThreshold) {
-            TooDim(lightIcon);
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (lightSensor != null) {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-//        Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
     }
-
-    private void TooDim(ImageView lightIcon) {
-        belowThreshold = true;
-        belowThresholdTimestamp = SystemClock.elapsedRealtime();
-        lightIcon.setImageResource(R.drawable.baseline_access_time_24);
-    }
-
-    private void BrightEnough(ImageView lightIcon) {
-        belowThreshold = false;
-
-        long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
-        String dayOfWeek = LocalDate.now().format(formatter);
-
-        lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
-        LocalTime currentTime = LocalTime.now();
-
-        // Set the start time to 8:00 AM
-        String startTime = LocalTime.of(8, 0).toString();
-
-        // Set the end time to the current time
-        String endTime = currentTime.toString().substring(0,8);
-
-
-        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
-        mMorningViewModel.insert(morning);
-        Log.d("New entry", morning.getMorning());
-    }
-
-
 }

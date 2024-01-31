@@ -34,7 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the alarms
         setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.MONDAY, 6);
+        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.TUESDAY, 6);
+        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.WEDNESDAY, 6);
+        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.THURSDAY, 6);
+        setRepeatingAlarm(alarmManager, weekdayPendingIntent, Calendar.FRIDAY, 6);
+
         setRepeatingAlarm(alarmManager, weekendPendingIntent, Calendar.SATURDAY, 8);
+        setRepeatingAlarm(alarmManager, weekendPendingIntent, Calendar.SUNDAY, 8);
+
     }
 
     private void setRepeatingAlarm(AlarmManager alarmManager, PendingIntent pendingIntent, int dayOfWeek, int hourOfDay) {
