@@ -9,7 +9,7 @@ import android.util.Log;
 public class WeekendReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("WeekendReceiver", "Weekend  alarm triggered");
+        Log.i("Alarm", "Weekend  alarm triggered");
         // Create an intent to start the SoundRecorder Activity
         Intent startLightSensorIntent = new Intent(context, LightSensor.class);
 
