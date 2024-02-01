@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,7 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class SoundRecorder extends AppCompatActivity {
@@ -28,6 +36,9 @@ public class SoundRecorder extends AppCompatActivity {
     private String filePath;
     private AlarmUtil alarmUtil;
 
+    private MorningViewModel mMorningViewModel;
+    private long belowThresholdTimestamp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +50,7 @@ public class SoundRecorder extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
         }
+        alarmUtil.playAudio();
     }
 
     @Override
@@ -85,7 +97,8 @@ public class SoundRecorder extends AppCompatActivity {
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
                 if (amplitude > AMPLITUDE_THRESHOLD) {
                     stopRecording();
-                    alarmUtil.playAudio(); // Play sound when the amplitude threshold is exceeded
+                    // DB insert
+                    insertMorning();
                 } else {
                     mHandler.postDelayed(this, POLL_INTERVAL);
                 }
@@ -131,5 +144,22 @@ public class SoundRecorder extends AppCompatActivity {
                 Toast.makeText(this, "Permission denied to record audio", Toast.LENGTH_SHORT).show();
             }
         }
+
+
+    }
+    public void insertMorning() {
+        long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+        String dayOfWeek = LocalDate.now().format(formatter);
+
+        LocalTime currentTime = LocalTime.now();
+
+        String startTime = LocalTime.of(8, 0).toString();
+
+        String endTime = currentTime.toString().substring(0,8);
+
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+        mMorningViewModel.insert(morning);
     }
 }

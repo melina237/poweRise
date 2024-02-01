@@ -2,6 +2,7 @@ package com.example.powerise.db.morning;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -18,6 +19,9 @@ public interface MorningDao {
 
     @Query("DELETE FROM morning_table")
     void deleteAll();
+
+    @Delete
+    void deleteMorning(Morning morning);
 
     @Query("SELECT * FROM morning_table ORDER BY ms_to_get_up ASC")
     LiveData<List<Morning>> getAlphabetizedmornings();

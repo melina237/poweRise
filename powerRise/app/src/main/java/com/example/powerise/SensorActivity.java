@@ -57,7 +57,6 @@ public class SensorActivity implements SensorEventListener {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
             String dayOfWeek = LocalDate.now().format(formatter);
 
-            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
             LocalTime currentTime = LocalTime.now();
 
             String startTime = LocalTime.of(8, 0).toString();
@@ -68,6 +67,9 @@ public class SensorActivity implements SensorEventListener {
             Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
             mMorningViewModel.insert(morning);
             //Log.d("neuer eintrag", morning.getMorning());
+
+            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+
 
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
