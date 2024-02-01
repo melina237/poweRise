@@ -1,6 +1,7 @@
-package com.example.powerise;
+package com.example.powerise.sensors;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,12 +13,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.powerise.AlarmUtil;
+import com.example.powerise.MainActivity;
+import com.example.powerise.R;
 import com.example.powerise.db.morning.Morning;
 import com.example.powerise.db.morning.MorningViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
 
 public class LightSensor extends AppCompatActivity implements SensorEventListener {
 
@@ -87,6 +92,9 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
             mMorningViewModel.insert(morning);
 
             alarmUtil.stopAudio();
+            Intent backToMain = new Intent(LightActivity.this, MainActivity.class);
+            startActivity(backToMain); // Start MainActivity
+            finish(); // Optionally, finish this activity if you no longer need it
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
             lightIcon.setImageResource(R.drawable.baseline_access_time_24);
