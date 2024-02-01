@@ -1,4 +1,4 @@
-package com.example.powerise;
+package com.example.powerise.sensors;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.powerise.AlarmUtil;
+import com.example.powerise.R;
 
 public class LightSensor extends AppCompatActivity implements SensorEventListener {
 

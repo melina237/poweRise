@@ -1,4 +1,4 @@
-package com.example.powerise;
+package com.example.powerise.sensors;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -13,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.powerise.AlarmUtil;
+import com.example.powerise.R;
+
 import java.util.Objects;
 
-public class SoundRecorder extends AppCompatActivity {
+public class SoundSensor extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final double AMPLITUDE_THRESHOLD = 20000; // This is an approximation
     private static final int POLL_INTERVAL = 200; // milliseconds
@@ -27,7 +30,7 @@ public class SoundRecorder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sound_recorder); // Set your layout here
+        setContentView(R.layout.activity_sound_sensor); // Set your layout here
 
         filePath = Objects.requireNonNull(getExternalFilesDir(null)).getAbsolutePath() + "/audio_record.3gp";
         alarmUtil = new AlarmUtil(this);
@@ -100,7 +103,7 @@ public class SoundRecorder extends AppCompatActivity {
                 mRecorder = null;
                 isRecording = false;
                 alarmUtil.stopAudio(); // Stop any playing audio
-                Toast.makeText(SoundRecorder.this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SoundSensor.this, "Recording stopped", Toast.LENGTH_SHORT).show();
             } catch (RuntimeException stopException) {
                 Log.e("SoundRecorder", "Error stopping recording: " + stopException.getMessage());
             }

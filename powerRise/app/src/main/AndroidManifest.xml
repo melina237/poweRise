@@ -24,11 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SoundRecorder" />
-        <activity android:name=".LightSensor" />
+        <activity android:name=".sensors.SoundSensor" />
+        <activity android:name=".sensors.LightSensor" />
         <activity android:name=".StatisticsActivity" />
-        <receiver android:name=".WeekdayReceiver" />
-        <receiver android:name=".WeekendReceiver" />
+        <receiver android:name=".receiver.WeekdayReceiver" />
+        <receiver android:name=".receiver.WeekendReceiver" />
 
     </application>
 
