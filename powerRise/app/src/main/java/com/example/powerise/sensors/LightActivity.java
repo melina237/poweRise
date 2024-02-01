@@ -1,5 +1,6 @@
 package com.example.powerise.sensors;
 
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -23,8 +24,15 @@ import java.time.format.DateTimeFormatter;
 import com.example.powerise.AlarmUtil;
 import com.example.powerise.MainActivity;
 import com.example.powerise.R;
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
 
-public class LightActivity extends AppCompatActivity implements SensorEventListener {
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+
+public class LightSensor extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
@@ -36,11 +44,20 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
 
     public MorningViewModel mMorningViewModel;
 
+    private final MorningViewModel mMorningViewModel;
+
+    private long belowThresholdTimestamp;
+
+    public LightSensor(Context context, MorningViewModel mMorningViewModel) {
+        this.mMorningViewModel = mMorningViewModel;
+        initializeSensor();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_sensor); // Replace with your layout file
-        findViewById(R.id.lightIcon);
+        ImageView lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
         alarmUtil = new AlarmUtil(this);
         initializeSensor();
         alarmUtil.playAudio();
@@ -65,11 +82,12 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        ImageView lightIcon = (ImageView) findViewById(R.id.lightIcon);
+        ImageView lightIcon = findViewById(R.id.lightIcon);
 
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+
             // morning inserten
             insertMorning();
 

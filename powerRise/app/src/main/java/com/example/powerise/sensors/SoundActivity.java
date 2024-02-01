@@ -100,6 +100,22 @@ public class SoundActivity extends AppCompatActivity {
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
                 if (amplitude > AMPLITUDE_THRESHOLD) {
                     stopRecording();
+                    alarmUtil.playAudio(); // Play sound when the amplitude threshold is exceeded
+                    // Morning inserten
+
+
+                    long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+                    String dayOfWeek = LocalDate.now().format(formatter);
+
+                    lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+                    LocalTime currentTime = LocalTime.now();
+
+                    String startTime = LocalTime.of(8, 0).toString();
+
+                    String endTime = currentTime.toString().substring(0,8);
+                    Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+                    mMorningViewModel.insert(morning);
                     Intent backToMain = new Intent(SoundActivity.this, MainActivity.class);
                     startActivity(backToMain); // Start MainActivity
                     finish(); // Optionally, finish this activity if you no longer need it
@@ -111,6 +127,7 @@ public class SoundActivity extends AppCompatActivity {
             }
         }
     };
+
     private void stopRecording() {
         if (!isRecording) {
             return;
