@@ -1,20 +1,21 @@
 package com.example.powerise;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.Objects;
 
-public class SoundRecorder extends Activity {
+public class SoundRecorder extends AppCompatActivity {
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final double AMPLITUDE_THRESHOLD = 20000; // This is an approximation
@@ -25,20 +26,33 @@ public class SoundRecorder extends Activity {
     private boolean isRecording = false;
 
     private String filePath;
+    private AlarmUtil alarmUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_recorder); // Set your layout here
 
-        // Set file path for recording
         filePath = Objects.requireNonNull(getExternalFilesDir(null)).getAbsolutePath() + "/audio_record.3gp";
+        alarmUtil = new AlarmUtil(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
-        } else {
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             startRecording();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopRecording();
     }
 
     private void startRecording() {
@@ -50,7 +64,7 @@ public class SoundRecorder extends Activity {
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mRecorder.setOutputFile(filePath); // Use the app-specific directory
+        mRecorder.setOutputFile(filePath);
 
         try {
             mRecorder.prepare();
@@ -60,6 +74,7 @@ public class SoundRecorder extends Activity {
         } catch (Exception e) {
             Log.e("SoundRecorder", "Error starting recording: " + e.getMessage());
             isRecording = false;
+            Toast.makeText(this, "Error starting recording", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -70,6 +85,7 @@ public class SoundRecorder extends Activity {
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
                 if (amplitude > AMPLITUDE_THRESHOLD) {
                     stopRecording();
+                    alarmUtil.playAudio(); // Play sound when the amplitude threshold is exceeded
                 } else {
                     mHandler.postDelayed(this, POLL_INTERVAL);
                 }
@@ -88,6 +104,8 @@ public class SoundRecorder extends Activity {
                 mRecorder.release();
                 mRecorder = null;
                 isRecording = false;
+                alarmUtil.stopAudio(); // Stop any playing audio
+                Toast.makeText(SoundRecorder.this, "Recording stopped", Toast.LENGTH_SHORT).show();
             } catch (RuntimeException stopException) {
                 Log.e("SoundRecorder", "Error stopping recording: " + stopException.getMessage());
             }
@@ -96,7 +114,6 @@ public class SoundRecorder extends Activity {
 
     public double getAmplitude() {
         if (mRecorder != null) {
-            Log.i("SoundRecorder", "Amplitude");
             return (mRecorder.getMaxAmplitude() / 2700.0);
         } else {
             return 0;
@@ -105,11 +122,13 @@ public class SoundRecorder extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startRecording();
             } else {
                 Log.e("SoundRecorder", "Permission denied to record audio");
+                Toast.makeText(this, "Permission denied to record audio", Toast.LENGTH_SHORT).show();
             }
         }
     }
