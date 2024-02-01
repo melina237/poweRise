@@ -7,13 +7,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    MorningViewModel mMorningViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // Schedule the alarms when the app starts
         scheduleAlarm();
+
+
+        /*mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        // Erstelle ein Morning-Objekt und füge es der Datenbank hinzu
+        Morning morning = new Morning(2, LocalDate.now().toString(),"TEST", "startTime", "endTime");
+        mMorningViewModel.insert(morning);
+        Log.i("morning", "eintrag hinzugefügt");
+
+        */
+
+
     }
 
     private void scheduleAlarm() {
@@ -76,4 +95,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
+    public void goToStatistics (View view){
+        Intent intent = new Intent (this, StatisticsActivity.class);
+        startActivity(intent);
+    }
 }
+

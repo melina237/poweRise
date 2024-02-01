@@ -47,6 +47,10 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
+        ImageView lightIcon = (ImageView) findViewById(R.id.lightIcon);
+
+
+
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
