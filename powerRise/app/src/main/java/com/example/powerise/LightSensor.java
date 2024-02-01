@@ -47,6 +47,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
         float lux = event.values[0];
         ImageView lightIcon = (ImageView) findViewById(R.id.lightIcon);
 
+
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
 
