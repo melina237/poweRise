@@ -16,18 +16,14 @@ import androidx.core.content.ContextCompat;
 import java.util.Objects;
 
 public class SoundRecorder extends AppCompatActivity {
-
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final double AMPLITUDE_THRESHOLD = 20000; // This is an approximation
     private static final int POLL_INTERVAL = 200; // milliseconds
-
     private MediaRecorder mRecorder = null;
     private final Handler mHandler = new Handler();
     private boolean isRecording = false;
-
     private String filePath;
     private AlarmUtil alarmUtil;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +88,6 @@ public class SoundRecorder extends AppCompatActivity {
             }
         }
     };
-
     private void stopRecording() {
         if (!isRecording) {
             return;
