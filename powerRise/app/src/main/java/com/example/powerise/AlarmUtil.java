@@ -35,6 +35,7 @@ public class AlarmUtil {
 
     // Method to stop playing audio
     public void stopAudio() {
+
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();

@@ -14,12 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.powerise.AlarmUtil;
 import com.example.powerise.MainActivity;
 import com.example.powerise.R;
 
 import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -35,6 +37,10 @@ public class SoundActivity extends AppCompatActivity {
     private boolean isRecording = false;
     private String filePath;
     private AlarmUtil alarmUtil;
+
+    private MorningViewModel mMorningViewModel;
+    private long belowThresholdTimestamp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +119,8 @@ public class SoundActivity extends AppCompatActivity {
                     Intent backToMain = new Intent(SoundActivity.this, MainActivity.class);
                     startActivity(backToMain); // Start MainActivity
                     finish(); // Optionally, finish this activity if you no longer need it
+                    // DB insert
+                    insertMorning();
                 } else {
                     mHandler.postDelayed(this, POLL_INTERVAL);
                 }
@@ -158,5 +166,22 @@ public class SoundActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission denied to record audio", Toast.LENGTH_SHORT).show();
             }
         }
+
+
+    }
+    public void insertMorning() {
+        long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+        String dayOfWeek = LocalDate.now().format(formatter);
+
+        LocalTime currentTime = LocalTime.now();
+
+        String startTime = LocalTime.of(8, 0).toString();
+
+        String endTime = currentTime.toString().substring(0,8);
+
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+        mMorningViewModel.insert(morning);
     }
 }

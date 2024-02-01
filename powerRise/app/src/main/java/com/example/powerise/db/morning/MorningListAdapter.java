@@ -1,19 +1,25 @@
 package com.example.powerise.db.morning;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.powerise.db.RoomDatabase;
 
 import java.util.Objects;
 
 public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> {
 
-    public MorningListAdapter(@NonNull DiffUtil.ItemCallback<Morning> diffCallback) {
+    private final Context context;
+
+    public MorningListAdapter(@NonNull DiffUtil.ItemCallback<Morning> diffCallback, Context context) {
         super(diffCallback);
+        this.context = context;
     }
 
     @Override
@@ -24,9 +30,12 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
     @Override
     public void onBindViewHolder(MorningViewHolder holder, int position) {
         Morning current = getItem(position);
-        holder.bind(current.getMorning(holder.itemView.getContext()));  // Übergebe den Kontext der RecyclerView-Elementansicht
+        holder.bind(current.getMorning(context));  // Pass the context of the RecyclerView item view
     }
 
+    public Context getContext() {
+        return context;
+    }
 
     static public class MorningDiff extends DiffUtil.ItemCallback<Morning> {
         private final Context context;
@@ -46,5 +55,28 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
         }
     }
 
+    public void deleteItem(int position) {
+        if (position != RecyclerView.NO_POSITION) {
+            Morning morningToDelete = getItem(position);
+
+            // Use AsyncTask to perform the delete operation in the background
+            new DeleteMorningAsyncTask(context).execute(morningToDelete);
+        }
+    }
+
+    private static class DeleteMorningAsyncTask extends AsyncTask<Morning, Void, Void> {
+        private Context context;
+
+        DeleteMorningAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Morning... mornings) {
+            // Perform the delete operation in the background
+            RoomDatabase.getDatabase(context).morningDao().deleteMorning(mornings[0]);
+            return null;
+        }
+    }
 
 }
