@@ -5,6 +5,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +18,6 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private  boolean belowThreshold = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +45,20 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-//        lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
+        ImageView lightIcon = (ImageView) findViewById(R.id.lightIcon);
 
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
-//            long durationMillis = SystemClock.elapsedRealtime() - belowThresholdTimestamp;
-//            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
-//            Morning morning = new Morning(durationMillis);
-//            mMorningViewModel.insert(morning);
+
+            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+
+
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
-//            belowThresholdTimestamp = SystemClock.elapsedRealtime();
-
-//            lightIcon.setImageResource(R.drawable.baseline_access_time_24);
+            long belowThresholdTimestamp = SystemClock.elapsedRealtime();
+            lightIcon.setImageResource(R.drawable.baseline_access_time_24);
         }
-//        Toast.makeText(context, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Light intensity: " + lux, Toast.LENGTH_SHORT).show();
     }
 
 
