@@ -1,14 +1,23 @@
 package com.example.powerise;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.powerise.db.morning.Morning;
+import com.example.powerise.db.morning.MorningViewModel;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class LightSensor extends AppCompatActivity implements SensorEventListener {
 
@@ -16,13 +25,21 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     private Sensor lightSensor;
     private boolean belowThreshold = true;
     private AlarmUtil alarmUtil;
-    private ImageView lightIcon;
+
+    private final MorningViewModel mMorningViewModel;
+
+    private long belowThresholdTimestamp;
+
+    public LightSensor(Context context, MorningViewModel mMorningViewModel) {
+        this.mMorningViewModel = mMorningViewModel;
+        initializeSensor();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_sensor); // Replace with your layout file
-        lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
+        ImageView lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
         alarmUtil = new AlarmUtil(this);
         initializeSensor();
         alarmUtil.playAudio();
@@ -47,13 +64,28 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        ImageView lightIcon = (ImageView) findViewById(R.id.lightIcon);
+        ImageView lightIcon = findViewById(R.id.lightIcon);
 
 
 
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+
+
+            long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
+            String dayOfWeek = LocalDate.now().format(formatter);
+
+            lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
+            LocalTime currentTime = LocalTime.now();
+
+            String startTime = LocalTime.of(8, 0).toString();
+
+            String endTime = currentTime.toString().substring(0,8);
+            Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+            mMorningViewModel.insert(morning);
+
             alarmUtil.stopAudio();
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;

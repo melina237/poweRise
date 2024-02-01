@@ -1,5 +1,5 @@
 package com.example.powerise;
-
+/*
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -87,3 +87,4 @@ public class SensorActivity implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 }
+*/
