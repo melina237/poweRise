@@ -45,4 +45,8 @@ dependencies {
     implementation ("androidx.room:room-common:2.6.1")
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     androidTestImplementation ("androidx.room:room-testing:2.6.1")
+
+    // Dependency für Record löschen
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+
 }

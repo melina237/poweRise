@@ -30,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
         scheduleAlarm();
 
 
-        /*mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         // Erstelle ein Morning-Objekt und füge es der Datenbank hinzu
         Morning morning = new Morning(2, LocalDate.now().toString(),"TEST", "startTime", "endTime");
         mMorningViewModel.insert(morning);
         Log.i("morning", "eintrag hinzugefügt");
 
-        */
+
 
 
     }
@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
     public void goToStatistics (View view){
         Intent intent = new Intent (this, StatisticsActivity.class);
         startActivity(intent);
+
     }
+
+
+
+
 }
 
