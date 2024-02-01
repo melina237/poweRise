@@ -5,14 +5,13 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.io.File;
 import java.util.Random;
 
 public class Alarm extends Activity {
 
     private MediaPlayer mediaPlayer;
-    private String[] audioFiles; // Array of audio file resource IDs
-    private Random random = new Random();
+    // Array of audio file resource IDs
+    private final Random random = new Random();
     int[] rawFiles = new int[]{R.raw.chipi,R.raw.power,R.raw.fellas,R.raw.loud,R.raw.notice,
             R.raw.phonk,R.raw.sigma};
     @Override
@@ -32,14 +31,11 @@ public class Alarm extends Activity {
         // Example using a raw resource. Replace R.raw.your_audio_file with your audio file.
         playAudio();
         // Optional: Set a listener to handle completion of audio playback
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // Code to execute after the audio finishes playing
-                Log.i("Alarm", "Playback completed");
-                stopAudio();
-                playAudio();
-            }
+        mediaPlayer.setOnCompletionListener(mp -> {
+            // Code to execute after the audio finishes playing
+            Log.i("Alarm", "Playback completed");
+            stopAudio();
+            playAudio();
         });
     }
 

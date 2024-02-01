@@ -6,12 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.powerise.db.morning.Morning;
 import com.example.powerise.db.morning.MorningViewModel;
 
@@ -22,9 +19,8 @@ import java.time.format.DateTimeFormatter;
 public class SensorActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor lightSensor;
-    private Context context;
-    private ImageView lightIcon;
-    private MorningViewModel mMorningViewModel; // Corrected field name
+    private final Context context;
+    private final MorningViewModel mMorningViewModel;
 
     private boolean belowThreshold = true;
     private long belowThresholdTimestamp;
@@ -52,7 +48,7 @@ public class SensorActivity implements SensorEventListener {
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float lux = event.values[0];
-        lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
+        ImageView lightIcon = ((AppCompatActivity) context).findViewById(R.id.lightIcon);
 
         if (lux > 10000 && belowThreshold) {
             belowThreshold = false;
@@ -64,16 +60,14 @@ public class SensorActivity implements SensorEventListener {
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
             LocalTime currentTime = LocalTime.now();
 
-            // Set the start time to 8:00 AM
             String startTime = LocalTime.of(8, 0).toString();
 
-            // Set the end time to the current time
             String endTime = currentTime.toString().substring(0,8);
 
 
             Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
             mMorningViewModel.insert(morning);
-            Log.d("neuer eintrag", morning.getMorning());
+            //Log.d("neuer eintrag", morning.getMorning());
 
         } else if (lux <= 10000 && !belowThreshold) {
             belowThreshold = true;
