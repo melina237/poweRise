@@ -41,7 +41,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_sensor);
-        lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
+        lightIcon = findViewById(R.id.lightIcon);
         alarmUtil = new AlarmUtil(this);
         mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         belowThresholdTimestamp = SystemClock.elapsedRealtime();
