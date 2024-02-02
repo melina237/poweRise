@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class SoundActivity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private static final int POLL_INTERVAL = 5;
+    private static final int POLL_INTERVAL = 100;
     private MediaRecorder mRecorder = null;
     private final Handler mHandler = new Handler();
     private boolean isRecording = false;
@@ -99,7 +99,7 @@ public class SoundActivity extends AppCompatActivity {
             if (isRecording) {
                 double amplitude = getAmplitude();
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
-                if (amplitude > 12) {
+                if (amplitude > 32766) {
                     Log.i("Alarm", "Amplitude exceeded threshold, switching to MainActivity");
                     stopRecording();
 
@@ -136,8 +136,8 @@ public class SoundActivity extends AppCompatActivity {
 
     public double getAmplitude() {
         if (mRecorder != null) {
-            Log.i("Alarm", "getAmplitude: " + mRecorder.getMaxAmplitude() / 2700.0);
-            return (mRecorder.getMaxAmplitude() / 2700.0);
+            Log.i("Alarm", "getAmplitude: " + mRecorder.getMaxAmplitude() );
+            return (mRecorder.getMaxAmplitude() );
         } else {
             return 0;
         }
@@ -164,7 +164,7 @@ public class SoundActivity extends AppCompatActivity {
 
         LocalTime currentTime = LocalTime.now();
 
-        String startTime = LocalTime.of(8, 0).toString();
+        String startTime = LocalTime.of(6, 0).toString();
 
         String endTime = currentTime.toString().substring(0, 8);
 

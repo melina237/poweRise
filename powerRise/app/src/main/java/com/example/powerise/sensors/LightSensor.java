@@ -1,6 +1,5 @@
 package com.example.powerise.sensors;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -38,18 +37,14 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     public MorningViewModel mMorningViewModel;
 
 
-
-    public LightSensor(Context context, MorningViewModel mMorningViewModel) {
-        this.mMorningViewModel = mMorningViewModel;
-        initializeSensor();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_sensor);
-        ImageView lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
+        lightIcon = findViewById(R.id.lightIcon); // Assuming there's an ImageView with this ID in your layout
         alarmUtil = new AlarmUtil(this);
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        belowThresholdTimestamp = SystemClock.elapsedRealtime();
         initializeSensor();
         alarmUtil.playAudio();
     }
@@ -127,7 +122,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
 
         LocalTime currentTime = LocalTime.now();
 
-        String startTime = LocalTime.of(8, 0).toString();
+        String startTime = LocalTime.of(10, 0).toString();
 
         String endTime = currentTime.toString().substring(0,8);
 

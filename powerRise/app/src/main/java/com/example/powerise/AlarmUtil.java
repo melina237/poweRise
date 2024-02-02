@@ -13,7 +13,7 @@ public class AlarmUtil {
     private final Context context;
     private final Random random = new Random();
     private final int[] rawFiles = new int[]{R.raw.chipi, R.raw.power, R.raw.fellas, R.raw.loud, R.raw.notice,
-            R.raw.phonk, R.raw.sigma};
+           R.raw.sigma};
 
     public AlarmUtil(Context context) {
         this.context = context;

@@ -22,8 +22,9 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public MorningViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MorningViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return MorningViewHolder.create(parent);
     }
 

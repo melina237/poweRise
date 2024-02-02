@@ -11,14 +11,10 @@ import com.example.powerise.sensors.LightSensor;
 public class WeekendReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("Alarm", "Weekend  alarm triggered");
-        // Create an intent to start the SoundRecorder Activity
+        Log.i("Alarm", "Weekend alarm triggered");
         Intent startLightSensorIntent = new Intent(context, LightSensor.class);
-
-        // Add FLAG_ACTIVITY_NEW_TASK since you're starting the Activity from outside of an Activity context
         startLightSensorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Start the SoundRecorder Activity
         context.startActivity(startLightSensorIntent);
     }
 }
+
