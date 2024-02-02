@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,7 +44,6 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
         setContentView(R.layout.activity_light_sensor);
         lightIcon = findViewById(R.id.lightIcon);
         alarmUtil = new AlarmUtil(this);
-        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         belowThresholdTimestamp = SystemClock.elapsedRealtime();
         initializeSensor();
         alarmUtil.playAudio();
@@ -116,6 +116,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     }
 
     public void insertMorning() {
+        Log.i("Alarm", "Inserting morning");
         long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
         String dayOfWeek = LocalDate.now().format(formatter);
@@ -129,5 +130,6 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
         mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
         mMorningViewModel.insert(morning);
+        Log.i("Alarm", "Morning inserted");
     }
 }
