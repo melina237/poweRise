@@ -1,24 +1,28 @@
 @startuml
 left to right direction
 actor User
+actor App
 rectangle "Use Cases" {
-    usecase "Record Sound" as RecordSound
-    usecase "Monitor Light" as MonitorLight
-    usecase "View Statistics" as ViewStatistics
+    usecase "Scream" as RecordSound
+    usecase "Turn light on" as MonitorLight
+    usecase "View statistics" as ViewStatistics
+    usecase "Start measuring" as Startmeasuring
+    usecase "Insert morning Data" as insert
 }
 
 User --> RecordSound: Initiates
 User --> MonitorLight: Initiates
 User --> ViewStatistics: Initiates
 
-RecordSound --> (Start Recording)
-RecordSound --> (Stop Recording)
-RecordSound --> (Insert Morning Data)
+App --> insert
+App --> Startmeasuring
 
-MonitorLight --> (Initialize Light Sensor)
-MonitorLight --> (On Light Sensor Change)
-MonitorLight --> (Insert Morning Data)
+RecordSound --> insert
+MonitorLight --> insert
 
-ViewStatistics --> (View Morning Statistics)
+RecordSound --> Startmeasuring
+MonitorLight --> Startmeasuring
+
+
 
 @enduml

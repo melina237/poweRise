@@ -63,15 +63,15 @@ package "powerise" {
         +stopAudio(): void
     }
 
-    class LightSensor {
+    class LightSensorActivity {
         -sensorManager: SensorManager
-        -lightSensor: Sensor
+        -LightSensorActivity: Sensor
         -belowThreshold: boolean
         -alarmUtil: AlarmUtil
         -lightIcon: ImageView
         -belowThresholdTimestamp: long
         -mMorningViewModel: MorningViewModel
-        +LightSensor()
+        +LightSensorActivity()
         +initializeSensor(): void
         +onAccuracyChanged(sensor: Sensor, accuracy: int): void
         +onSensorChanged(event: SensorEvent): void
@@ -91,7 +91,7 @@ package "powerise" {
         +goToStatistics(view: View): void
     }
 
-    class SoundRecorder {
+    class SoundSensorActivity {
         -mRecorder: MediaRecorder
         -mHandler: Handler
         -isRecording: boolean
@@ -99,7 +99,7 @@ package "powerise" {
         -alarmUtil: AlarmUtil
         -mMorningViewModel: MorningViewModel
         -belowThresholdTimestamp: long
-        +SoundRecorder()
+        +SoundSensorActivity()
         +onCreate(savedInstanceState: Bundle): void
         +onResume(): void
         +onPause(): void
@@ -136,15 +136,18 @@ package "powerise" {
         +onReceive(context: Context, intent: Intent): void
     }
 
-    LightSensor --|> MainActivity: Uses
-    SoundRecorder --|> MainActivity: Uses
     StatisticsActivity --> MorningViewModel: Uses
     SwipeToDeleteCallback --|> MorningListAdapter: Uses
-    WeekendReceiver --|> LightSensor: Uses
-    WeekdayReceiver --|> SoundRecorder: Uses
+    WeekendReceiver --|> LightSensorActivity: Uses
+    WeekdayReceiver --|> SoundSensorActivity: Uses
 
-    LightSensor --|> AlarmUtil: Uses
-    SoundRecorder --|> AlarmUtil: Uses
+    MainActivity --|> WeekdayReceiver
+    MainActivity --|> WeekendReceiver
+    LightSensorActivity --|> AlarmUtil: Uses
+    SoundSensorActivity --|> AlarmUtil: Uses
+
+    LightSensorActivity --|> MorningViewModel
+    SoundSensorActivity --|> MorningViewModel
 }
 
 @enduml
