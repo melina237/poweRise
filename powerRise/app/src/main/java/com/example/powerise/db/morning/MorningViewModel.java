@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MorningViewModel extends AndroidViewModel {
 
-    private MorningRepository mRepository;
+    private final MorningRepository mRepository;
 
     private final LiveData<List<Morning>> mAllmornings;
 

@@ -5,4 +5,11 @@
     <string name="bla">bla</string>
     <string name="statistiken">Statistiken</string>
     <string name="deine_statistiken">Deine Statistiken!</string>
+    <string name="licht_an">Licht an!</string>
+    <string name="powerise">poweRise</string>
+    <string name="statistiken_main">Statistiken</string>
+    <string name="power_exclamation">Power!</string>
+    <string name="bla2">bla</string>
+    <string name="deine_statistiken2">Deine Statistiken!</string>
+    <string name="back">Back</string>
 </resources>

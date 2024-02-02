@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".sensors.SoundActivity" />
-        <activity android:name=".sensors.LightSensor" />
+        <activity android:name=".sensors.SoundSensorActivity" />
+        <activity android:name=".sensors.LightSensorActivity" />
         <activity android:name=".StatisticsActivity" />
         <receiver android:name=".receiver.WeekdayReceiver" />
         <receiver android:name=".receiver.WeekendReceiver" />

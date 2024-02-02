@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {Morning.class}, version = 2, exportSchema = false)
 public abstract class RoomDatabase extends androidx.room.RoomDatabase {
-    private static androidx.room.RoomDatabase.Callback sRoomDatabaseCallback = new androidx.room.RoomDatabase.Callback() {
+    private static final androidx.room.RoomDatabase.Callback sRoomDatabaseCallback = new androidx.room.RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -28,12 +28,6 @@ public abstract class RoomDatabase extends androidx.room.RoomDatabase {
                 MorningDao dao = INSTANCE.morningDao();
                 
                 dao.deleteAll();
-                /*
-                Morning morning = new Morning(2, "test", "test");
-                dao.insert(morning);
-                morning = new Morning(3, "test2", "test");
-                dao.insert(morning);
-                */
 
             });
         }

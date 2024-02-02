@@ -28,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
         scheduleAlarm();
 
 
-        // Erstelle ein Morning-Objekt und füge es der Datenbank hinzu
-        Log.i("morning", "eintrag hinzugefügt");
-
-
 
 
     }

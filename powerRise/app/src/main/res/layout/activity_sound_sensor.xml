@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/concert_one"
         android:padding="6dp"
-        android:text="Power!"
+        android:text="@string/power_exclamation"
         android:textColor="#1DB954"
         android:textSize="24sp"
         android:textStyle="bold"

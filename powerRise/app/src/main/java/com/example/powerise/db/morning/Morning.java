@@ -43,10 +43,10 @@ public class Morning {
         int orientation = context.getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Gerät ist im Querformat (horizontal)
+            // Device is in landscape mode
             return String.format(Locale.getDefault(), "%s, %s: %s - %s (%s)", dayOfWeek, date, startAlarm, endAlarm, mMorning);
         } else {
-            // Gerät ist im Hochformat (vertikal)
+            // Device is in portrait mode
             return String.format(Locale.getDefault(), "%s, %s: %s", dayOfWeek, date, mMorning);
         }
     }

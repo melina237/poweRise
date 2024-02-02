@@ -7,7 +7,7 @@ import android.util.Log;
 
 import java.util.Random;
 
-public class AlarmUtil {
+public class AlarmSound {
 
     private MediaPlayer mediaPlayer;
     private final Context context;
@@ -15,7 +15,7 @@ public class AlarmUtil {
     private final int[] rawFiles = new int[]{R.raw.chipi, R.raw.power, R.raw.fellas, R.raw.loud, R.raw.notice,
            R.raw.sigma};
 
-    public AlarmUtil(Context context) {
+    public AlarmSound(Context context) {
         this.context = context;
     }
 

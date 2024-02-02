@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.powerise.AlarmUtil;
+import com.example.powerise.AlarmSound;
 import com.example.powerise.MainActivity;
 import com.example.powerise.R;
 import com.example.powerise.db.morning.Morning;
@@ -25,13 +25,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class LightSensor extends AppCompatActivity implements SensorEventListener {
+public class LightSensorActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private boolean belowThreshold = true;
-    private AlarmUtil alarmUtil;
-    private ImageView lightIcon;
+    private AlarmSound alarmSound;
 
     private long belowThresholdTimestamp;
 
@@ -42,11 +41,10 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_sensor);
-        lightIcon = findViewById(R.id.lightIcon);
-        alarmUtil = new AlarmUtil(this);
+        alarmSound = new AlarmSound(this);
         belowThresholdTimestamp = SystemClock.elapsedRealtime();
         initializeSensor();
-        alarmUtil.playAudio();
+        alarmSound.playAudio();
     }
 
     private void initializeSensor() {
@@ -76,8 +74,8 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
             insertMorning();
 
 
-            alarmUtil.stopAudio();
-            Intent backToMain = new Intent(LightSensor.this, MainActivity.class);
+            alarmSound.stopAudio();
+            Intent backToMain = new Intent(LightSensorActivity.this, MainActivity.class);
             startActivity(backToMain);
             finish();
         } else if (lux <= 1000 && !belowThreshold) {
@@ -96,7 +94,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
-        alarmUtil.stopAudio();
+        alarmSound.stopAudio();
     }
 
     @Override
@@ -110,8 +108,8 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (alarmUtil != null) {
-            alarmUtil.stopAudio();
+        if (alarmSound != null) {
+            alarmSound.stopAudio();
         }
     }
 
