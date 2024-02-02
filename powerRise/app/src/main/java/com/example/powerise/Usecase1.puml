@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+actor User
+rectangle "Use Cases" {
+    usecase "Record Sound" as RecordSound
+    usecase "Monitor Light" as MonitorLight
+    usecase "View Statistics" as ViewStatistics
+}
+
+User --> RecordSound: Initiates
+User --> MonitorLight: Initiates
+User --> ViewStatistics: Initiates
+
+RecordSound --> (Start Recording)
+RecordSound --> (Stop Recording)
+RecordSound --> (Insert Morning Data)
+
+MonitorLight --> (Initialize Light Sensor)
+MonitorLight --> (On Light Sensor Change)
+MonitorLight --> (Insert Morning Data)
+
+ViewStatistics --> (View Morning Statistics)
+
+@enduml

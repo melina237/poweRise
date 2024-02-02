@@ -6,8 +6,13 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/Widget.AppCompat.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light" />
+        android:padding="6dp"
+        android:textSize="10sp"
+        android:textColor="#FFFFFF"
+        android:background="#1DB954"
+        android:fontFamily="@font/concert_one"
+        android:textStyle="bold"/>
+
 </LinearLayout>
