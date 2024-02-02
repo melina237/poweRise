@@ -140,9 +140,11 @@ package "powerise" {
     SoundRecorder --|> MainActivity: Uses
     StatisticsActivity --> MorningViewModel: Uses
     SwipeToDeleteCallback --|> MorningListAdapter: Uses
+    WeekendReceiver --|> LightSensor: Uses
+    WeekdayReceiver --|> SoundRecorder: Uses
 
-    AlarmUtil <-- LightSensor: Uses
     LightSensor --|> AlarmUtil: Uses
+    SoundRecorder --|> AlarmUtil: Uses
 }
 
 @enduml
