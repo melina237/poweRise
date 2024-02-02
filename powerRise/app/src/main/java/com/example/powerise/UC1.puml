@@ -1,0 +1,148 @@
+@startuml
+
+package "powerise.db.morning" {
+    class Morning {
+        +mMorning: float
+        +date: String
+        +dayOfWeek: String
+        +startAlarm: String
+        +endAlarm: String
+        {method} +Morning(morning: float, date: String, dayOfWeek: String, startAlarm: String, endAlarm: String)
+        {method} +getMorning(context: Context): String
+    }
+
+    interface MorningDao {
+        +insert(morning: Morning): void
+        +deleteAll(): void
+        +deleteMorning(morning: Morning): void
+        +getAlphabetizedmornings(): LiveData<List<Morning>>
+    }
+
+    class MorningListAdapter {
+        -context: Context
+        -adapter: ListAdapter<Morning, MorningViewHolder>
+        +MorningListAdapter(diffCallback: DiffUtil.ItemCallback<Morning>, context: Context)
+        +onCreateViewHolder(parent: ViewGroup, viewType: int): MorningViewHolder
+        +onBindViewHolder(holder: MorningViewHolder, position: int): void
+        +getContext(): Context
+        +deleteItem(position: int): void
+    }
+
+    class MorningViewHolder {
+        -wordItemView: TextView
+        +MorningViewHolder(itemView: View)
+        +bind(record: String): void
+        +create(parent: ViewGroup): MorningViewHolder
+    }
+
+    class MorningRepository {
+        -mMorningDao: MorningDao
+        -mAllmornings: LiveData<List<Morning>>
+        +MorningRepository(application: Application)
+        +getAllmornings(): LiveData<List<Morning>>
+        +insert(morning: Morning): void
+    }
+
+    class MorningViewModel {
+        -mRepository: MorningRepository
+        -mAllmornings: LiveData<List<Morning>>
+        +MorningViewModel(application: Application)
+        +getAllMornings(): LiveData<List<Morning>>
+        +insert(morning: Morning): void
+    }
+}
+
+package "powerise" {
+    class AlarmUtil {
+        -mediaPlayer: MediaPlayer
+        -context: Context
+        -random: Random
+        -rawFiles: int[]
+        +AlarmUtil(context: Context)
+        +playAudio(): void
+        +stopAudio(): void
+    }
+
+    class LightSensor {
+        -sensorManager: SensorManager
+        -lightSensor: Sensor
+        -belowThreshold: boolean
+        -alarmUtil: AlarmUtil
+        -lightIcon: ImageView
+        -belowThresholdTimestamp: long
+        -mMorningViewModel: MorningViewModel
+        +LightSensor()
+        +initializeSensor(): void
+        +onAccuracyChanged(sensor: Sensor, accuracy: int): void
+        +onSensorChanged(event: SensorEvent): void
+        +onPause(): void
+        +onResume(): void
+        +onDestroy(): void
+        +insertMorning(): void
+    }
+
+    class MainActivity {
+        -mMorningViewModel: MorningViewModel
+        +MainActivity()
+        +scheduleAlarm(): void
+        +isWeekend(calendar: Calendar): boolean
+        +onResume(): void
+        +onPause(): void
+        +goToStatistics(view: View): void
+    }
+
+    class SoundRecorder {
+        -mRecorder: MediaRecorder
+        -mHandler: Handler
+        -isRecording: boolean
+        -filePath: String
+        -alarmUtil: AlarmUtil
+        -mMorningViewModel: MorningViewModel
+        -belowThresholdTimestamp: long
+        +SoundRecorder()
+        +onCreate(savedInstanceState: Bundle): void
+        +onResume(): void
+        +onPause(): void
+        +startRecording(): void
+        +mPollTask: Runnable
+        +stopRecording(): void
+        +getAmplitude(): double
+        +onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[]): void
+        +insertMorning(): void
+    }
+
+    class StatisticsActivity {
+        -mMorningViewModel: MorningViewModel
+        +onCreate(savedInstanceState: Bundle): void
+        +onResume(): void
+        +onPause(): void
+    }
+
+    class SwipeToDeleteCallback {
+        -adapter: MorningListAdapter
+        -icon: Drawable
+        -background: ColorDrawable
+        +SwipeToDeleteCallback(adapter: MorningListAdapter)
+        +onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): boolean
+        +onSwiped(viewHolder: RecyclerView.ViewHolder, direction: int): void
+        +onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: float, dY: float, actionState: int, isCurrentlyActive: boolean): void
+    }
+
+    class WeekdayReceiver {
+        +onReceive(context: Context, intent: Intent): void
+    }
+
+    class WeekendReceiver {
+        +onReceive(context: Context, intent: Intent): void
+    }
+
+    LightSensor --|> MainActivity: Uses
+    SoundRecorder --|> MainActivity: Uses
+    StatisticsActivity --> MorningViewModel: Uses
+    SwipeToDeleteCallback --|> MorningListAdapter: Uses
+
+    AlarmUtil <-- LightSensor: Uses
+    LightSensor --|> AlarmUtil: Uses
+}
+
+@enduml
