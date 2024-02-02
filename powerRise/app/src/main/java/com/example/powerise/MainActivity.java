@@ -19,20 +19,16 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Schedule the alarms when the app starts
+        // Schedule the alarms when the app starts, the alarm is inevitable
         scheduleAlarm();
 
-
-
-
     }
-
     private void scheduleAlarm() {
+        // Check permission for exact alarms on Android 12+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!getSystemService(AlarmManager.class).canScheduleExactAlarms()) {
                 Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
@@ -40,14 +36,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1); // Move to the next day
+        calendar.add(Calendar.DAY_OF_YEAR, 1); // Schedule the alarm for tomorrow
 
         int hourOfDay;
         PendingIntent pendingIntent;
+
         Log.i("Alarm", "Scheduling alarm");
+
         if (isWeekend(calendar)) {
             hourOfDay = 10; // Weekend alarm time
             Intent weekendIntent = new Intent(this, WeekendReceiver.class);
@@ -67,35 +64,15 @@ public class MainActivity extends AppCompatActivity {
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
-
     private boolean isWeekend(Calendar calendar) {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         return dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
     }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     public void goToStatistics (View view){
         Intent intent = new Intent (this, StatisticsActivity.class);
         startActivity(intent);
 
     }
-
-
-
-
-
 
 }
 

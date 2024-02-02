@@ -14,6 +14,8 @@ public interface MorningDao {
 
     // allowing the insert of the same morning multiple times by passing a
     // conflict resolution strategy
+    // should not be necessary because of the autoGenerate = true
+    // in the Morning class primary key
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Morning morning);
 

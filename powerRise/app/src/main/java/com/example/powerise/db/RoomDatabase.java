@@ -13,23 +13,13 @@ import com.example.powerise.db.morning.MorningDao;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Morning.class}, version = 2, exportSchema = false)
+@Database(entities = {Morning.class}, version = 3, exportSchema = false)
 public abstract class RoomDatabase extends androidx.room.RoomDatabase {
     private static final androidx.room.RoomDatabase.Callback sRoomDatabaseCallback = new androidx.room.RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // If you want to keep data through app restarts,
-            // comment out the following block
-            databaseWriteExecutor.execute(() -> {
-                // Populate the database in the background.
-                // If you want to start with more words, just add them.
-                MorningDao dao = INSTANCE.morningDao();
-                
-                dao.deleteAll();
-
-            });
         }
     };
 

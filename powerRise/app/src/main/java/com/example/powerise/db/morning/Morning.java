@@ -16,7 +16,7 @@ public class Morning {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    @ColumnInfo(name = "ms_to_get_up")
+    @ColumnInfo(name = "s_to_get_up")
     public float mMorning;
 
     @ColumnInfo(name = "date")

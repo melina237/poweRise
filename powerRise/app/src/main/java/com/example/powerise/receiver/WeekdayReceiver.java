@@ -11,13 +11,13 @@ public class WeekdayReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("Alarm", "Weekday alarm triggered");
-        // Create an intent to start the SoundRecorder Activity
+        // Create an intent to start the SoundSensorActivity when the alarm triggers
         Intent startSoundRecorderIntent = new Intent(context, SoundSensorActivity.class);
 
-        // Add FLAG_ACTIVITY_NEW_TASK since you're starting the Activity from outside of an Activity context
+        // Added FLAG_ACTIVITY_NEW_TASK since we start the activity from a BroadcastReceiver and not from an Activity
         startSoundRecorderIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Start the SoundRecorder Activity
-        context.startActivity(startSoundRecorderIntent);       // Your Weekday Code Here
+        // Start SoundSensorActivity
+        context.startActivity(startSoundRecorderIntent);
     }
 }

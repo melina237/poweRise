@@ -31,7 +31,7 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
     @Override
     public void onBindViewHolder(MorningViewHolder holder, int position) {
         Morning current = getItem(position);
-        holder.bind(current.getMorning(context));  // Pass the context of the RecyclerView item view
+        holder.bind(current.getMorning(context));
     }
 
     public Context getContext() {
@@ -60,7 +60,6 @@ public class MorningListAdapter extends ListAdapter<Morning, MorningViewHolder> 
         if (position != RecyclerView.NO_POSITION) {
             Morning morningToDelete = getItem(position);
 
-            // Use AsyncTask to perform the delete operation in the background
             new DeleteMorningAsyncTask(context).execute(morningToDelete);
         }
     }

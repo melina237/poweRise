@@ -14,15 +14,12 @@ import com.example.powerise.db.morning.MorningListAdapter;
 import com.example.powerise.db.morning.MorningViewModel;
 
 public class StatisticsActivity extends AppCompatActivity {
-
     MorningViewModel mMorningViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
-        // Set up RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
         // Create the DiffCallback
@@ -43,20 +40,10 @@ public class StatisticsActivity extends AppCompatActivity {
         mMorningViewModel.getAllMornings().observe(this, adapter::submitList);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
     public void goToHome (View view){
         Intent intent = new Intent (this, MainActivity.class);
         startActivity(intent);
 
     }
-
 }
 

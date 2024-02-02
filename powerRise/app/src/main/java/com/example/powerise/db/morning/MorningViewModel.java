@@ -18,7 +18,6 @@ public class MorningViewModel extends AndroidViewModel {
         mRepository = new MorningRepository(application);
         mAllmornings = mRepository.getAllmornings();
     }
-
     public LiveData<List<Morning>> getAllMornings() { return mAllmornings; }
 
     public void insert(Morning morning) { mRepository.insert(morning); }
