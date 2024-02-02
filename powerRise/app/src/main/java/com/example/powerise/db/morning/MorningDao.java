@@ -23,6 +23,6 @@ public interface MorningDao {
     @Delete
     void deleteMorning(Morning morning);
 
-    @Query("SELECT * FROM morning_table ORDER BY ms_to_get_up ASC")
+    @Query("SELECT * FROM morning_table ORDER BY id ASC")
     LiveData<List<Morning>> getAlphabetizedmornings();
 }

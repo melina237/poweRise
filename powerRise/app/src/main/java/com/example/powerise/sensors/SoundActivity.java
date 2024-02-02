@@ -98,8 +98,10 @@ public class SoundActivity extends AppCompatActivity {
         public void run() {
             if (isRecording) {
                 double amplitude = getAmplitude();
+                Toast.makeText(SoundActivity.this, "Amplitude: " + amplitude, Toast.LENGTH_SHORT).show();
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
-                if (amplitude > 32764) {
+
+                if (amplitude > 26214) { // 80% of max amplitude
                     Log.i("Alarm", "Amplitude exceeded threshold, switching to MainActivity");
                     stopRecording();
 
@@ -136,8 +138,9 @@ public class SoundActivity extends AppCompatActivity {
 
     public double getAmplitude() {
         if (mRecorder != null) {
-            Log.i("Alarm", "getAmplitude: " + mRecorder.getMaxAmplitude() );
-            return (mRecorder.getMaxAmplitude() );
+            int amplitude = mRecorder.getMaxAmplitude();
+            Log.i("Alarm", "getAmplitude: " + amplitude);
+            return amplitude;
         } else {
             return 0;
         }

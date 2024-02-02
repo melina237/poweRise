@@ -10,20 +10,15 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.powerise.db.morning.Morning;
-import com.example.powerise.db.morning.MorningViewModel;
 import com.example.powerise.receiver.WeekdayReceiver;
 import com.example.powerise.receiver.WeekendReceiver;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    MorningViewModel mMorningViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +28,7 @@ public class MainActivity extends AppCompatActivity {
         scheduleAlarm();
 
 
-        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
         // Erstelle ein Morning-Objekt und füge es der Datenbank hinzu
-        Morning morning = new Morning(2, LocalDate.now().toString(),"TEST", "startTime", "endTime");
-        mMorningViewModel.insert(morning);
         Log.i("morning", "eintrag hinzugefügt");
 
 

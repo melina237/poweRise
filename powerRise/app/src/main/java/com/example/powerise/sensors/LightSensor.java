@@ -69,7 +69,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
         float lux = event.values[0];
         ImageView lightIcon = findViewById(R.id.lightIcon);
 
-        if (lux > 10000 && belowThreshold) {
+        if (lux > 1000 && belowThreshold) {
             belowThreshold = false;
             lightIcon.setImageResource(R.drawable.baseline_access_alarms_24);
 
@@ -80,7 +80,7 @@ public class LightSensor extends AppCompatActivity implements SensorEventListene
             Intent backToMain = new Intent(LightSensor.this, MainActivity.class);
             startActivity(backToMain);
             finish();
-        } else if (lux <= 10000 && !belowThreshold) {
+        } else if (lux <= 1000 && !belowThreshold) {
             belowThreshold = true;
             belowThresholdTimestamp = SystemClock.elapsedRealtime();
             lightIcon.setImageResource(R.drawable.baseline_access_time_24);
