@@ -12,7 +12,10 @@ import java.util.Locale;
 
 @Entity(tableName = "morning_table")
 public class Morning {
-    @PrimaryKey
+
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
     @ColumnInfo(name = "ms_to_get_up")
     public float mMorning;
 
