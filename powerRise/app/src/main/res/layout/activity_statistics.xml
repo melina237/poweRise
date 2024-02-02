@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Deine Statistiken!"
+        android:text="@string/deine_statistiken"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,15 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="lichtsensor aktivieren"
-        android:onClick="onSensorChanged"
-        tools:layout_editor_absoluteX="98dp"
-        tools:layout_editor_absoluteY="499dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

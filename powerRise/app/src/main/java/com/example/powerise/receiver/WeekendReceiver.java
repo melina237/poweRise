@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.powerise.sensors.LightActivity;
+import com.example.powerise.sensors.LightSensor;
 
 
 public class WeekendReceiver extends BroadcastReceiver {
@@ -13,7 +13,7 @@ public class WeekendReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("Alarm", "Weekend  alarm triggered");
         // Create an intent to start the SoundRecorder Activity
-        Intent startLightSensorIntent = new Intent(context, LightActivity.class);
+        Intent startLightSensorIntent = new Intent(context, LightSensor.class);
 
         // Add FLAG_ACTIVITY_NEW_TASK since you're starting the Activity from outside of an Activity context
         startLightSensorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

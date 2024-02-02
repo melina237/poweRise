@@ -6,11 +6,9 @@
 
     <ImageView
         android:id="@+id/lightIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="217dp"
+        android:layout_height="269dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/light_icon_description"
-        android:src="@drawable/baseline_access_alarms_24" /> <!-- Replace with a default light icon -->
-
-    <!-- You can add more UI elements here as needed -->
+        android:src="@drawable/baseline_access_alarms_24" />
 </RelativeLayout>

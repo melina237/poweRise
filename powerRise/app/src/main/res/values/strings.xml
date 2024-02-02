@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">poweRise</string>
     <string name="light_icon_description">Sun</string>
+    <string name="guten_morgen">GUTEN MORGEN</string>
+    <string name="bla">bla</string>
+    <string name="statistiken">Statistiken</string>
+    <string name="deine_statistiken">Deine Statistiken!</string>
 </resources>
