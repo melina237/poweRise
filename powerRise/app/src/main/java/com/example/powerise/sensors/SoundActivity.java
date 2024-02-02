@@ -1,6 +1,7 @@
-package com.example.powerise;
+package com.example.powerise.sensors;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.powerise.AlarmUtil;
+import com.example.powerise.MainActivity;
+import com.example.powerise.R;
 import com.example.powerise.db.morning.Morning;
 import com.example.powerise.db.morning.MorningViewModel;
 
@@ -23,16 +27,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class SoundRecorder extends AppCompatActivity {
-
+public class SoundActivity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private static final double AMPLITUDE_THRESHOLD = 20000; // This is an approximation
-    private static final int POLL_INTERVAL = 200; // milliseconds
-
+    private static final int POLL_INTERVAL = 5;
     private MediaRecorder mRecorder = null;
     private final Handler mHandler = new Handler();
     private boolean isRecording = false;
-
     private String filePath;
     private AlarmUtil alarmUtil;
 
@@ -42,15 +42,19 @@ public class SoundRecorder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sound_recorder); // Set your layout here
+        setContentView(R.layout.activity_sound_sensor);
 
         filePath = Objects.requireNonNull(getExternalFilesDir(null)).getAbsolutePath() + "/audio_record.3gp";
         alarmUtil = new AlarmUtil(this);
+        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
+        belowThresholdTimestamp = SystemClock.elapsedRealtime();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+        } else {
+            alarmUtil.playAudio();
+            startRecording();
         }
-        alarmUtil.playAudio();
     }
 
     @Override
@@ -95,10 +99,15 @@ public class SoundRecorder extends AppCompatActivity {
             if (isRecording) {
                 double amplitude = getAmplitude();
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
-                if (amplitude > AMPLITUDE_THRESHOLD) {
+                if (amplitude > 12) {
+                    Log.i("Alarm", "Amplitude exceeded threshold, switching to MainActivity");
                     stopRecording();
-                    // DB insert
+
                     insertMorning();
+                    Log.i("Alarm", "Switching to MainActivity");
+                    Intent backToMain = new Intent(SoundActivity.this, MainActivity.class);
+                    startActivity(backToMain);
+                    finish();
                 } else {
                     mHandler.postDelayed(this, POLL_INTERVAL);
                 }
@@ -117,8 +126,8 @@ public class SoundRecorder extends AppCompatActivity {
                 mRecorder.release();
                 mRecorder = null;
                 isRecording = false;
-                alarmUtil.stopAudio(); // Stop any playing audio
-                Toast.makeText(SoundRecorder.this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                alarmUtil.stopAudio();
+                Toast.makeText(SoundActivity.this, "Recording stopped", Toast.LENGTH_SHORT).show();
             } catch (RuntimeException stopException) {
                 Log.e("SoundRecorder", "Error stopping recording: " + stopException.getMessage());
             }
@@ -127,6 +136,7 @@ public class SoundRecorder extends AppCompatActivity {
 
     public double getAmplitude() {
         if (mRecorder != null) {
+            Log.i("Alarm", "getAmplitude: " + mRecorder.getMaxAmplitude() / 2700.0);
             return (mRecorder.getMaxAmplitude() / 2700.0);
         } else {
             return 0;
@@ -144,9 +154,9 @@ public class SoundRecorder extends AppCompatActivity {
                 Toast.makeText(this, "Permission denied to record audio", Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
+
+
     public void insertMorning() {
         long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
@@ -156,10 +166,9 @@ public class SoundRecorder extends AppCompatActivity {
 
         String startTime = LocalTime.of(8, 0).toString();
 
-        String endTime = currentTime.toString().substring(0,8);
+        String endTime = currentTime.toString().substring(0, 8);
 
-        mMorningViewModel = new ViewModelProvider(this).get(MorningViewModel.class);
-        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(),dayOfWeek, startTime, endTime);
+        Morning morning = new Morning(durationSeconds, LocalDate.now().toString(), dayOfWeek, startTime, endTime);
         mMorningViewModel.insert(morning);
     }
 }

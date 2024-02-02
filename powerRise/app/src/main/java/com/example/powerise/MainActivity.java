@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.powerise.db.morning.Morning;
 import com.example.powerise.db.morning.MorningViewModel;
+import com.example.powerise.receiver.WeekdayReceiver;
+import com.example.powerise.receiver.WeekendReceiver;
 
 import java.time.LocalDate;
 import java.util.Calendar;
