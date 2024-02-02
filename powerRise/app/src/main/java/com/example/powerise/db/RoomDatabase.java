@@ -13,7 +13,7 @@ import com.example.powerise.db.morning.MorningDao;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Morning.class}, version = 1, exportSchema = false)
+@Database(entities = {Morning.class}, version = 2, exportSchema = false)
 public abstract class RoomDatabase extends androidx.room.RoomDatabase {
     private static androidx.room.RoomDatabase.Callback sRoomDatabaseCallback = new androidx.room.RoomDatabase.Callback() {
         @Override
