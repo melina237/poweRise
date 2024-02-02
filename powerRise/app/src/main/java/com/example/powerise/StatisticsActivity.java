@@ -1,6 +1,8 @@
 package com.example.powerise;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -50,4 +52,11 @@ public class StatisticsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+    public void goToHome (View view){
+        Intent intent = new Intent (this, MainActivity.class);
+        startActivity(intent);
+
+    }
+
 }
+
