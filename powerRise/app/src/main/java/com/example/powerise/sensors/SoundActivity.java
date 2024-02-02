@@ -99,7 +99,7 @@ public class SoundActivity extends AppCompatActivity {
             if (isRecording) {
                 double amplitude = getAmplitude();
                 Log.i("SoundRecorder", "Amplitude: " + amplitude);
-                if (amplitude > 32766) {
+                if (amplitude > 32764) {
                     Log.i("Alarm", "Amplitude exceeded threshold, switching to MainActivity");
                     stopRecording();
 
@@ -158,6 +158,7 @@ public class SoundActivity extends AppCompatActivity {
 
 
     public void insertMorning() {
+        Log.i("Alarm", "Inserting morning");
         long durationSeconds = (SystemClock.elapsedRealtime() - belowThresholdTimestamp) / 1000;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE"); // "EEE" for short day of week format
         String dayOfWeek = LocalDate.now().format(formatter);
@@ -170,5 +171,7 @@ public class SoundActivity extends AppCompatActivity {
 
         Morning morning = new Morning(durationSeconds, LocalDate.now().toString(), dayOfWeek, startTime, endTime);
         mMorningViewModel.insert(morning);
+        Log.i("Alarm", "Morning inserted");
+
     }
 }
